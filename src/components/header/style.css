@@ -1,0 +1,9 @@
+.logo::before,
+.logo::after {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  background-size: 800%;
+}
+
+.logo {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+}
