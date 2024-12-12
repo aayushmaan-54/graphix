@@ -1,4 +1,5 @@
 import { Canvas, FabricObject } from "fabric";
+import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
 
@@ -6,6 +7,29 @@ export const FILL_COLOR = "rgba(0, 0, 0, 1)";
 export const STROKE_COLOR = "rgba(0, 0, 0, 1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
+export const DEFAULT_FONT_FAMILY = "Arial";
+export const DEFAULT_FONT_SIZE = 32;
+
+export const fonts = [
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Palatino",
+  "Bookman",
+  "Comic Sans MS",
+  "Impact",
+  "Lucida Sans Unicode",
+  "Geneva",
+  "Lucida Console",
+];
 
 export type ActiveTool =
   | "select"
@@ -46,6 +70,8 @@ export type BuildEditorProps = {
   setStrokeWidth: (value: number) => void;
   strokeDashArray: number[];
   setStrokeDashArray: (value: number[]) => void;
+  fontFamily: string;
+  setFontFamily: (value: string) => void;
   selectedObjects: FabricObject[];
 }
 
@@ -103,8 +129,18 @@ export const DIAMOND_OPTIONS = {
   angle: 0
 };
 
+export const TEXT_OPTIONS = {
+  left: 100,
+  top: 100,
+  fill: FILL_COLOR,
+  fontSize: DEFAULT_FONT_SIZE,
+  fontFamily: DEFAULT_FONT_FAMILY,
+};
+
 
 export interface Editor {
+  changeFontFamily: (value: string) => void;
+  addText: (content: string, options?: ITextboxOptions) => void;
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
@@ -123,6 +159,7 @@ export interface Editor {
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveOpacity: () => number;
+  getActiveFontFamily: () => string;
   canvas: Canvas;
   selectedObjects: FabricObject[];
 }

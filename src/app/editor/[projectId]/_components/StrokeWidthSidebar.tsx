@@ -1,4 +1,4 @@
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActiveTool, Editor, STROKE_DASH_ARRAY, STROKE_WIDTH } from "../../types";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import ToolSidebarClose from "./ToolSidebarClose";

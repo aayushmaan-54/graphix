@@ -1,4 +1,4 @@
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ActiveTool, Editor, STROKE_COLOR } from "../../types";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import { ColorPicker } from "./ColorPicker";

@@ -1,8 +1,17 @@
 import { useCallback, useMemo, useState } from "react";
-import { Canvas, Circle, FabricObject, Polygon, Rect, Shadow, Triangle } from 'fabric';
+import {
+  Canvas,
+  Circle,
+  FabricObject,
+  Polygon,
+  Rect,
+  Shadow,
+  Textbox,
+  Triangle
+} from 'fabric';
 import useAutoResize from "./use-autoresize";
 import { createCircleControls } from "@/lib/custom-controls/controls";
-import { BuildEditorProps, CIRCLE_OPTIONS, DIAMOND_OPTIONS, Editor, editorHookProps, FILL_COLOR, INVERSE_TRIANGLE_OPTIONS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TRIANGLE_OPTIONS } from "@/app/editor/types";
+import { BuildEditorProps, CIRCLE_OPTIONS, DEFAULT_FONT_FAMILY, DIAMOND_OPTIONS, Editor, editorHookProps, FILL_COLOR, INVERSE_TRIANGLE_OPTIONS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "@/app/editor/types";
 import useCanvasEvents from "./use-canvas-events";
 import { isTextType } from "@/app/editor/utils";
 
@@ -28,6 +37,8 @@ const buildEditor = ({
   setStrokeWidth,
   strokeDashArray,
   setStrokeDashArray,
+  fontFamily,
+  setFontFamily,
   selectedObjects
 }: BuildEditorProps): Editor => {
   const getWorkspace = () => {
@@ -50,6 +61,29 @@ const buildEditor = ({
   }
 
   return {
+    changeFontFamily: (value: string) => {
+      setFontFamily(value);
+      const activeObjects = canvas.getActiveObjects();
+      if (activeObjects.length) {
+        activeObjects.forEach((object) => {
+          if (isTextType(object.type)) {
+            object.set({ fontFamily: value });
+          }
+        });
+        canvas.renderAll();
+      }
+    },
+    addText: (content, options) => {
+      const object = new Textbox(content, {
+        ...TEXT_OPTIONS,
+        // @ts-ignore
+        fill: fillColor as string,
+        ...options,
+      });
+
+      canvas.add(object);
+      canvas.renderAll();
+    },
     changeOpacity: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         object.set({ opacity: value });
@@ -276,6 +310,16 @@ const buildEditor = ({
       const value = selectedObject.get("opacity") || 1;
       return value;
     },
+    getActiveFontFamily: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return 1;
+      }
+
+      const value = selectedObject.get("fontFamily") || fontFamily;
+      return value;
+    },
     selectedObjects
   };
 }
@@ -292,6 +336,7 @@ export default function useEditor({
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
+  const [fontFamily, setFontFamily] = useState(DEFAULT_FONT_FAMILY);
 
   useAutoResize({ canvas, container });
   useCanvasEvents({
@@ -313,6 +358,8 @@ export default function useEditor({
         setStrokeWidth,
         strokeDashArray,
         setStrokeDashArray,
+        fontFamily,
+        setFontFamily,
         selectedObjects
       });
     }
@@ -374,24 +421,24 @@ export default function useEditor({
     setCanvas(initialCanvas);
     setContainer(initialContainer);
 
-    const test = new Rect({
-      width: 100,
-      height: 100,
-      fill: "black",
-      // controls: createCircleControls(),
-      // cornerPadding: 0,
-      // touchCornerSize: 10,
-      // cornerSize: 10,
-      // cornerColor: "#FFFFFF",
-      // cornerStyle: "circle",
-      // borderColor: "#1297FF",
-      // cornerStrokeColor: "#1297FF",
-      // transparentCorners: false,
-    });
+    // const test = new Rect({
+    //   width: 100,
+    //   height: 100,
+    //   fill: "black",
+    //   controls: createCircleControls(),
+    //   cornerPadding: 0,
+    //   touchCornerSize: 10,
+    //   cornerSize: 10,
+    //   cornerColor: "#FFFFFF",
+    //   cornerStyle: "circle",
+    //   borderColor: "#1297FF",
+    //   cornerStrokeColor: "#1297FF",
+    //   transparentCorners: false,
+    // });
 
 
-    initialCanvas.add(test);
-    initialCanvas.centerObject(test);
+    // initialCanvas.add(test);
+    // initialCanvas.centerObject(test);
   }, []);
 
 

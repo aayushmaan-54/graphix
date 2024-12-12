@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Canvas, FabricObject } from "fabric";
+import { Canvas } from "fabric";
 import useEditor from "@/hooks/use-editor";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
@@ -12,6 +12,8 @@ import FillColorSidebar from "./FillColorSidebar";
 import StrokeColorSidebar from "./StrokeColorSidebar";
 import StrokeWidthSidebar from "./StrokeWidthSidebar";
 import OpacitySidebar from "./OpacitySidebar";
+import TextSidebar from "./TextSidebar";
+import FontfamilySidebar from "./FontfamilySidebar";
 
 export default function EditorSection() {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -105,6 +107,16 @@ export default function EditorSection() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FontfamilySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="flex-1 overflow-auto relative flex flex-col dark:bg-card bg-muted">
           <EditToolbar
             editor={editor}
@@ -113,7 +125,7 @@ export default function EditorSection() {
             key={JSON.stringify(editor?.canvas.getActiveObject())}
           />
           <div ref={canvasContainerRef} className="flex-1 h-[calc(100%-px)]">
-            <canvas ref={canvasRef} className="w-full h-full border-4 border-muted" />
+            <canvas ref={canvasRef} className="w-full h-full" />
           </div>
           <Footer />
         </main>
