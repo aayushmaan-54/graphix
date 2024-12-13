@@ -7,4 +7,34 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
 - ```FabricJS```: Canvas library
 - ```shadcn/ui```: UI library
 
-## Features
+## Features  
+
+#### Shapes  
+- **Add Shapes**  
+  - Customize:  
+    - Fill color  
+    - Stroke (color, styles, width)  
+    - Opacity  
+  - **Delete Shapes**  
+  - **Layer Shapes**:  
+    - Organize into different layers of shapes or text  
+
+#### Text  
+- **Add Text**  
+  - Text Options:  
+    - Textbox  
+    - Heading  
+    - Subheading  
+    - Paragraph  
+  - Customize:  
+    - Font family  
+    - Fill color  
+    - Font styles (Italic, Bold, Strikethrough)  
+    - Alignment (Left, Right, Center)  
+    - Font size  
+    - Opacity  
+  - **Layer Text**:  
+    - Organize into different layers of shapes or text  
+
+#### General  
+- **Delete Text and Shapes**
