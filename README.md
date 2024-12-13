@@ -8,7 +8,3 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
 - ```shadcn/ui```: UI library
 
 ## Features
-- Custom font
-- Adv image editing (crop, brightness, contrast,filter)
-- Remove bg
-- More export options (psd, svg)
