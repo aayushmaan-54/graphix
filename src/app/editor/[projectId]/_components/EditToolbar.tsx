@@ -1,11 +1,15 @@
-import { ActiveTool, Editor } from "../../types";
+import { ActiveTool, DEFAULT_FONT_SIZE, DEFAULT_FONT_WEIGHT, Editor } from "../../types";
 import CustomTooltip from "@/components/custom-tooltip/CustomTooltip";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { ArrowDown, ArrowUp, ChevronDown } from "lucide-react";
+import { AlignCenter, AlignLeft, AlignRight, ArrowDown, ArrowUp, ChevronDown, Trash2 } from "lucide-react";
 import { isTextType } from "../../utils";
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
+import { useState } from "react";
+import { ITextboxOptions } from "fabric/fabric-impl";
+import FontSizeInput from "./FontSizeInput";
 
 interface propsType {
   editor: Editor | undefined;
@@ -20,16 +24,108 @@ export default function EditToolbar({
   activeTool,
   onChangeActiveTool
 }: propsType) {
-  const fillColor = editor?.getActiveFillColor();
-  const strokeColor = editor?.getActiveStrokeColor();
-  const fontFamily = editor?.getActiveFontFamily();
+
+  const initFillColor = editor?.getActiveFillColor();
+  const initStrokeColor = editor?.getActiveStrokeColor();
+  const initFontFamily = editor?.getActiveFontFamily();
+  const initFontWeight = editor?.getActiveFontWeight() || DEFAULT_FONT_WEIGHT;
+  const initFontStyle = editor?.getActiveFontStyle();
+  const initFontLineThrough = editor?.getActiveFontLineThrough();
+  const initFontUnderline = editor?.getActiveFontUnderline();
+  const initTextAlign = editor?.getActiveTextAlign();
+  const initFontSize = editor?.getActiveFontSize() || DEFAULT_FONT_SIZE;
+
+  const [properties, setProperties] = useState({
+    fontWeight: initFontWeight,
+    strokeColor: initStrokeColor,
+    fillColor: initFillColor,
+    fontFamily: initFontFamily,
+    fontStyle: initFontStyle,
+    fontLineThrough: initFontLineThrough,
+    fontUnderline: initFontUnderline,
+    textAlign: initTextAlign,
+    fontSize: initFontSize,
+  });
+
+  const onChangeFontSize = (value: number) => {
+    if (!selectedObject) return;
+
+    editor?.changeFontSize(value);
+    setProperties((current) => ({
+      ...current,
+      fontSize: value,
+    }));
+  }
 
   const selectedObjectType = editor?.selectedObjects[0]?.type;
+  const selectedObject = editor?.selectedObjects[0];
   const isText = isTextType(selectedObjectType);
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="shrink-0 h-[56px] border-b w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2 bg-background" />
   }
+
+  const onChangeTextAlign = (value: ITextboxOptions['textAlign']): void => {
+    if (!selectedObject) return;
+
+    editor?.changeTextAlign(value);
+    setProperties((current) => ({
+      ...current,
+      textAlign: value,
+    }));
+  };
+
+  const toggleBold = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontWeight > 500 ? 500 : 700;
+    editor?.changeFontWeight(newValue);
+
+    setProperties((current) => ({
+      ...current,
+      fontWeight: newValue,
+    }));
+  };
+
+
+  const toggleItalic = () => {
+    if (!selectedObject) return;
+
+    const isItalic = properties.fontStyle === "italic";
+    const newValue = isItalic ? "normal" : "italic";
+    editor?.changeFontStyle(newValue);
+
+    setProperties((current) => ({
+      ...current,
+      fontStyle: newValue,
+    }));
+  };
+
+
+  const toggleLineThrough = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontLineThrough ? false : true;
+    editor?.changeFontLineThrough(newValue);
+
+    setProperties((current) => ({
+      ...current,
+      fontLineThrough: newValue,
+    }));
+  };
+
+
+  const toggleUnderline = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontUnderline ? false : true;
+    editor?.changeFontUnderline(newValue);
+
+    setProperties((current) => ({
+      ...current,
+      fontUnderline: newValue,
+    }));
+  };
 
   return (
     <>
@@ -44,14 +140,15 @@ export default function EditToolbar({
                 activeTool === "fill" && "bg-muted"
               )}
             >
+
               <div
                 className="rounded-sm size-4 border"
-                style={{ backgroundColor: fillColor }}
+                style={{ backgroundColor: properties.fillColor }}
               />
-
             </Button>
           </CustomTooltip>
         </div>
+
         {!isText && (
           <div className="flex items-center h-full justify-center">
             <CustomTooltip label="Stroke color" side="bottom" sideOffset={5}>
@@ -65,7 +162,7 @@ export default function EditToolbar({
               >
                 <div
                   className="rounded-sm size-4 border-2 bg-muted"
-                  style={{ borderColor: strokeColor }}
+                  style={{ borderColor: properties.strokeColor }}
                 />
               </Button>
             </CustomTooltip>
@@ -104,13 +201,156 @@ export default function EditToolbar({
                 )}
               >
                 <div className="max-w-[100px] truncate">
-                  {fontFamily}
+                  {properties.fontFamily}
                 </div>
                 <ChevronDown className="size-4 ml-2 shrink-0" />
               </Button>
             </CustomTooltip>
           </div>
         )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Bold" side="bottom" sideOffset={5}>
+              <Button
+                onClick={toggleBold}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.fontWeight > 500 && "bg-muted"
+                )}
+              >
+                <FaBold
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Italic" side="bottom" sideOffset={5}>
+              <Button
+                onClick={toggleItalic}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.fontStyle === "italic" && "bg-muted"
+                )}
+              >
+                <FaItalic
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Line through" side="bottom" sideOffset={5}>
+              <Button
+                onClick={toggleLineThrough}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.fontLineThrough && "bg-muted"
+                )}
+              >
+                <FaStrikethrough
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Underline" side="bottom" sideOffset={5}>
+              <Button
+                onClick={toggleUnderline}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.fontUnderline && "bg-muted"
+                )}
+              >
+                <FaUnderline
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Align left" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign("left")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.textAlign === "left" && "bg-muted"
+                )}
+              >
+                <AlignLeft
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Align center" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign("center")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.textAlign === "center" && "bg-muted"
+                )}
+              >
+                <AlignCenter
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Align right" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeTextAlign("right")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  properties.textAlign === "right" && "bg-muted"
+                )}
+              >
+                <AlignRight
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isText && (
+          <div className="flex items-center h-full justify-center">
+            <FontSizeInput
+              value={properties.fontSize}
+              onChange={onChangeFontSize}
+            />
+          </div>
+        )}
+
         <div className="flex items-center h-full justify-center">
           <CustomTooltip label="Bring forward" side="bottom" sideOffset={5}>
             <Button
@@ -151,6 +391,20 @@ export default function EditToolbar({
               )}
             >
               <RxTransparencyGrid
+                className="size-4 rounded-md"
+              />
+            </Button>
+          </CustomTooltip>
+        </div>
+
+        <div className="flex items-center h-full justify-center">
+          <CustomTooltip label="Delete" side="bottom" sideOffset={5}>
+            <Button
+              onClick={() => editor?.delete()}
+              size={"icon"}
+              variant={"ghost"}
+            >
+              <Trash2
                 className="size-4 rounded-md"
               />
             </Button>

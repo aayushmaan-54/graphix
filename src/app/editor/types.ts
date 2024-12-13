@@ -9,6 +9,7 @@ export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const DEFAULT_FONT_FAMILY = "Arial";
 export const DEFAULT_FONT_SIZE = 32;
+export const DEFAULT_FONT_WEIGHT = 400;
 
 export const fonts = [
   "Arial",
@@ -139,8 +140,15 @@ export const TEXT_OPTIONS = {
 
 
 export interface Editor {
+  delete: () => void;
   changeFontFamily: (value: string) => void;
   addText: (content: string, options?: ITextboxOptions) => void;
+  changeFontWeight: (vlaue: number) => void;
+  changeFontStyle: (value: string) => void;
+  changeFontLineThrough: (value: boolean) => void;
+  changeFontUnderline: (value: boolean) => void;
+  changeTextAlign: (value: ITextboxOptions['textAlign']) => void;
+  changeFontSize: (vlaue: number) => void;
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackwards: () => void;
@@ -160,6 +168,12 @@ export interface Editor {
   getActiveStrokeDashArray: () => number[];
   getActiveOpacity: () => number;
   getActiveFontFamily: () => string;
+  getActiveFontWeight: () => number;
+  getActiveFontStyle: () => string;
+  getActiveFontLineThrough: () => boolean;
+  getActiveFontUnderline: () => boolean;
+  getActiveTextAlign: () => ITextboxOptions['textAlign'];
+  getActiveFontSize: () => number;
   canvas: Canvas;
   selectedObjects: FabricObject[];
 }

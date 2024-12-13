@@ -11,9 +11,10 @@ import {
 } from 'fabric';
 import useAutoResize from "./use-autoresize";
 import { createCircleControls } from "@/lib/custom-controls/controls";
-import { BuildEditorProps, CIRCLE_OPTIONS, DEFAULT_FONT_FAMILY, DIAMOND_OPTIONS, Editor, editorHookProps, FILL_COLOR, INVERSE_TRIANGLE_OPTIONS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "@/app/editor/types";
+import { BuildEditorProps, CIRCLE_OPTIONS, DEFAULT_FONT_FAMILY, DEFAULT_FONT_SIZE, DEFAULT_FONT_WEIGHT, DIAMOND_OPTIONS, Editor, editorHookProps, FILL_COLOR, INVERSE_TRIANGLE_OPTIONS, RECTANGLE_OPTIONS, STROKE_COLOR, STROKE_DASH_ARRAY, STROKE_WIDTH, TEXT_OPTIONS, TRIANGLE_OPTIONS } from "@/app/editor/types";
 import useCanvasEvents from "./use-canvas-events";
 import { isTextType } from "@/app/editor/utils";
+import { ITextboxOptions } from "fabric/fabric-impl";
 
 const commonControlConfig = {
   touchCornerSize: 40,
@@ -61,6 +62,11 @@ const buildEditor = ({
   }
 
   return {
+    delete: () => {
+      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
     changeFontFamily: (value: string) => {
       setFontFamily(value);
       const activeObjects = canvas.getActiveObjects();
@@ -82,6 +88,54 @@ const buildEditor = ({
       });
 
       canvas.add(object);
+      canvas.renderAll();
+    },
+    changeFontWeight: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontWeight: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontStyle: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontLineThrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ linethrough: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeTextAlign: (value: ITextboxOptions['textAlign']) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontSize: value });
+        }
+      });
       canvas.renderAll();
     },
     changeOpacity: (value: number) => {
@@ -318,6 +372,66 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("fontFamily") || fontFamily;
+      return value;
+    },
+    getActiveFontWeight: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return DEFAULT_FONT_WEIGHT;
+      }
+
+      const value = selectedObject.get("fontWeight") || DEFAULT_FONT_WEIGHT;
+      return value;
+    },
+    getActiveFontStyle: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return "normal";
+      }
+
+      const value = selectedObject.get("fontStyle") || "normal";
+      return value;
+    },
+    getActiveFontLineThrough: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return false;
+      }
+
+      const value = selectedObject.get("linethrough") || false;
+      return value;
+    },
+    getActiveFontUnderline: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return false;
+      }
+
+      const value = selectedObject.get("underline") || false;
+      return value;
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return "left";
+      }
+
+      const value = selectedObject.get("textAlign") || "left";
+      return value;
+    },
+    getActiveFontSize: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return DEFAULT_FONT_SIZE;
+      }
+
+      const value = selectedObject.get("fontSize") || DEFAULT_FONT_SIZE;
       return value;
     },
     selectedObjects
