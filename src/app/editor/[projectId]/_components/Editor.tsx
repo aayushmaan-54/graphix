@@ -14,6 +14,9 @@ import StrokeWidthSidebar from "./StrokeWidthSidebar";
 import OpacitySidebar from "./OpacitySidebar";
 import TextSidebar from "./TextSidebar";
 import FontfamilySidebar from "./FontfamilySidebar";
+import ImageSidebar from "./ImageSidebar";
+import FilterSidebar from "./FilterSidebar";
+
 
 export default function EditorSection() {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -113,6 +116,16 @@ export default function EditorSection() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <FontfamilySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <ImageSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FilterSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

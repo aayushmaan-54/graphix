@@ -11,6 +11,34 @@ export const DEFAULT_FONT_FAMILY = "Arial";
 export const DEFAULT_FONT_SIZE = 32;
 export const DEFAULT_FONT_WEIGHT = 400;
 
+
+export const filters = [
+  "none",
+  "greyscale",
+  "polaroid",
+  "sepia",
+  "kodachrome",
+  "contrast",
+  "brightness",
+  "brownie",
+  "vintage",
+  "technicolor",
+  "pixelate",
+  "invert",
+  "blur",
+  "sharpen",
+  "emboss",
+  "removecolor",
+  "blacknwhite",
+  "vibrance",
+  "blendcolor",
+  "huerotate",
+  "resize",
+  "gamma",
+  "saturation",
+];
+
+
 export const fonts = [
   "Arial",
   "Arial Black",
@@ -140,6 +168,8 @@ export const TEXT_OPTIONS = {
 
 
 export interface Editor {
+  changeImageFilter: (value: string) => void;
+  addImage: (url: string) => void;
   delete: () => void;
   changeFontFamily: (value: string) => void;
   addText: (content: string, options?: ITextboxOptions) => void;
@@ -174,6 +204,7 @@ export interface Editor {
   getActiveFontUnderline: () => boolean;
   getActiveTextAlign: () => ITextboxOptions['textAlign'];
   getActiveFontSize: () => number;
+  getActiveImageFilters: () => string[];
   canvas: Canvas;
   selectedObjects: FabricObject[];
 }

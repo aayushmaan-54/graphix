@@ -10,6 +10,7 @@ import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { useState } from "react";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import FontSizeInput from "./FontSizeInput";
+import { TbColorFilter } from "react-icons/tb";
 
 interface propsType {
   editor: Editor | undefined;
@@ -59,7 +60,9 @@ export default function EditToolbar({
 
   const selectedObjectType = editor?.selectedObjects[0]?.type;
   const selectedObject = editor?.selectedObjects[0];
+
   const isText = isTextType(selectedObjectType);
+  const isImage = selectedObjectType === "image"
 
   if (editor?.selectedObjects.length === 0) {
     return <div className="shrink-0 h-[56px] border-b w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2 bg-background" />
@@ -130,24 +133,27 @@ export default function EditToolbar({
   return (
     <>
       <div className="shrink-0 h-[56px] border-b w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2 bg-background">
-        <div className="flex items-center h-full justify-center">
-          <CustomTooltip label="Color" side="bottom" sideOffset={5}>
-            <Button
-              onClick={() => onChangeActiveTool("fill")}
-              size={"icon"}
-              variant={"ghost"}
-              className={cn(
-                activeTool === "fill" && "bg-muted"
-              )}
-            >
+        {!isImage && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Color" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeActiveTool("fill")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  activeTool === "fill" && "bg-muted"
+                )}
+              >
 
-              <div
-                className="rounded-sm size-4 border"
-                style={{ backgroundColor: properties.fillColor }}
-              />
-            </Button>
-          </CustomTooltip>
-        </div>
+                <div
+                  className="rounded-sm size-4 border"
+                  style={{ backgroundColor: properties.fillColor }}
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
 
         {!isText && (
           <div className="flex items-center h-full justify-center">
@@ -348,6 +354,25 @@ export default function EditToolbar({
               value={properties.fontSize}
               onChange={onChangeFontSize}
             />
+          </div>
+        )}
+
+        {isImage && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Filters" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeActiveTool("filter")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  activeTool === "filter" && "bg-muted"
+                )}
+              >
+                <TbColorFilter
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
           </div>
         )}
 

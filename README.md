@@ -6,9 +6,7 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
 - ```PostgreSQL + Redis + Drizzle```: Database + ORM
 - ```FabricJS```: Canvas library
 - ```shadcn/ui```: UI library
+- ```Zod```: Validation in both frontend & backend
+- ```TanStack Query```: Data fetching, caching, and synchronization for APIs
 
 ## Features
-- Custom font
-- Adv image editing (crop, brightness, contrast,filter)
-- Remove bg
-- More export options (psd, svg)
