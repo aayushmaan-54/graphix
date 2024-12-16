@@ -1,4 +1,5 @@
 # Graphix
+
 Graphix is a powerful, easy-to-use platform designed to unleash your creativity. Whether you're a professional designer or a beginner, create stunning graphics, social media posts, and more with customizable templates, drag-and-drop tools, and seamless collaboration features. Empower your ideas with Graphix intuitive design experience!
 
 ## Tech Stack
@@ -8,11 +9,12 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
 - ```shadcn/ui```: UI library
 - ```Zod```: Validation in both frontend & backend
 - ```TanStack Query```: Data fetching, caching, and synchronization for APIs
-- ```Hugging face - stable-diffusion-3.5-large```: AI image generation
+- ```Hugging Face - Stable Diffusion 3.5-large```: AI image generation
+- ```Remove.bg```: Background removal
 
 ## Features  
 
-#### Shapes  
+### Shapes  
 - **Add Shapes**  
   - Customize:  
     - Fill color  
@@ -22,7 +24,7 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
   - **Layer Shapes**:  
     - Organize into different layers of shapes or text  
 
-#### Text  
+### Text  
 - **Add Text**  
   - Text Options:  
     - Textbox  
@@ -39,10 +41,17 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
   - **Layer Text**:  
     - Organize into different layers of shapes or text  
 
-#### Images  
+### Images  
 - **Add Images**  
   - Apply Filters:  
     - Apply predefined filters (e.g., sepia, black and white, vintage, ... +20 more)  
 
-#### General  
-- **Delete Text and Shapes**
+### AI Features  
+- **AI Image Generation**  
+  - Generate unique images using prompts with Stable Diffusion 3.5.   
+
+- **Background Removal**  
+  - Remove the background from uploaded images using Remove.bg API.  
+
+### General  
+- **Delete Text and Shapes**  
