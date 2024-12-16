@@ -16,6 +16,8 @@ import TextSidebar from "./TextSidebar";
 import FontfamilySidebar from "./FontfamilySidebar";
 import ImageSidebar from "./ImageSidebar";
 import FilterSidebar from "./FilterSidebar";
+import AI_Sidebar from "./AI_Sidebar";
+import RemoveBgSidebar from "./RemoveBgSidebar";
 
 
 export default function EditorSection() {
@@ -126,6 +128,16 @@ export default function EditorSection() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <FilterSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <AI_Sidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <RemoveBgSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

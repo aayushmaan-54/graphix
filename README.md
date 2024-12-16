@@ -8,6 +8,7 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
 - ```shadcn/ui```: UI library
 - ```Zod```: Validation in both frontend & backend
 - ```TanStack Query```: Data fetching, caching, and synchronization for APIs
+- ```Hugging face - stable-diffusion-3.5-large```: AI image generation
 
 ## Features  
 

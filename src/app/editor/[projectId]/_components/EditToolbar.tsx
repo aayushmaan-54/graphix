@@ -10,7 +10,7 @@ import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { useState } from "react";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import FontSizeInput from "./FontSizeInput";
-import { TbColorFilter } from "react-icons/tb";
+import { TbColorFilter, TbBackground } from "react-icons/tb";
 
 interface propsType {
   editor: Editor | undefined;
@@ -369,6 +369,25 @@ export default function EditToolbar({
                 )}
               >
                 <TbColorFilter
+                  className="size-4"
+                />
+              </Button>
+            </CustomTooltip>
+          </div>
+        )}
+
+        {isImage && (
+          <div className="flex items-center h-full justify-center">
+            <CustomTooltip label="Remove BG" side="bottom" sideOffset={5}>
+              <Button
+                onClick={() => onChangeActiveTool("remove-bg")}
+                size={"icon"}
+                variant={"ghost"}
+                className={cn(
+                  activeTool === "remove-bg" && "bg-muted"
+                )}
+              >
+                <TbBackground
                   className="size-4"
                 />
               </Button>
