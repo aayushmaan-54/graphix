@@ -90,6 +90,8 @@ export const selectionDependentTools = [
 
 
 export type BuildEditorProps = {
+  copy: () => void;
+  paste: () => void;
   canvas: Canvas;
   fillColor: string;
   setFillColor: (value: string) => void;
@@ -168,6 +170,10 @@ export const TEXT_OPTIONS = {
 
 
 export interface Editor {
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
   changeImageFilter: (value: string) => void;
   addImage: (url: string) => void;
   delete: () => void;

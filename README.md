@@ -23,6 +23,8 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
   - **Delete Shapes**  
   - **Layer Shapes**:  
     - Organize into different layers of shapes or text  
+  - **Duplicate Shapes**  
+    - Duplicate selected shapes on the canvas  
 
 ### Text  
 - **Add Text**  
@@ -40,18 +42,30 @@ Graphix is a powerful, easy-to-use platform designed to unleash your creativity.
     - Opacity  
   - **Layer Text**:  
     - Organize into different layers of shapes or text  
+  - **Duplicate Text**  
+    - Duplicate selected text on the canvas  
 
 ### Images  
 - **Add Images**  
   - Apply Filters:  
     - Apply predefined filters (e.g., sepia, black and white, vintage, ... +20 more)  
+  - **Duplicate Images**  
+    - Duplicate selected images on the canvas  
+
+### Drawing  
+- **Freehand Drawing**  
+  - Customize:  
+    - Brush color  
+    - Brush width  
 
 ### AI Features  
 - **AI Image Generation**  
-  - Generate unique images using prompts with Stable Diffusion 3.5.   
+  - Generate unique images using prompts with Stable Diffusion 3.5.  
 
 - **Background Removal**  
   - Remove the background from uploaded images using Remove.bg API.  
 
 ### General  
 - **Delete Text and Shapes**  
+- **Duplicate Objects**  
+  - Duplicate selected objects (shapes, text, images) on the canvas  

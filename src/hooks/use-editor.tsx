@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
 import {
+  BaseBrush,
   Canvas,
   Circle,
   FabricImage,
   FabricObject,
   FabricObjectProps,
   ObjectEvents,
+  PencilBrush,
   Polygon,
   Rect,
   SerializedObjectProps,
@@ -20,6 +22,7 @@ import useCanvasEvents from "./use-canvas-events";
 import { isTextType } from "@/app/editor/utils";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import createFilter from "@/lib/create-filter";
+import useClipboard from "./use-clipboard";
 
 const commonControlConfig = {
   touchCornerSize: 40,
@@ -34,6 +37,8 @@ const customControls = createCircleControls();
 
 
 const buildEditor = ({
+  copy,
+  paste,
   canvas,
   fillColor,
   setFillColor,
@@ -67,11 +72,29 @@ const buildEditor = ({
   }
 
   return {
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+
+      canvas.isDrawingMode = true;
+
+      if (!canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush = new PencilBrush(canvas);
+      }
+
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
+    onCopy: () => copy(),
+    onPaste: () => paste(),
     changeImageFilter: (value: string) => {
       const objects = canvas.getActiveObjects();
 
       objects.forEach((object) => {
-        if(object.type === "image") {
+        if (object.type === "image") {
           const imageObject = object as FabricImage;
 
           const effect = createFilter(value);
@@ -86,24 +109,24 @@ const buildEditor = ({
         crossOrigin: 'anonymous'
       });
       const workspace = getWorkspace();
-      
-    
+
+
       if (workspace) {
         const workspaceWidth = workspace.width || 0;
         const workspaceHeight = workspace.height || 0;
-    
+
         const scaleFactor = Math.min(
           workspaceWidth / image.width,
           workspaceHeight / image.height
         );
-    
+
         image.scale(scaleFactor);
         image.left = workspaceWidth / 2 - (image.width * scaleFactor) / 2;
         image.top = workspaceHeight / 2 - (image.height * scaleFactor) / 2;
       }
-    
+
       addTocanvas(image);
-    },    
+    },
     delete: () => {
       canvas.getActiveObjects().forEach((object) => canvas.remove(object));
       canvas.discardActiveObject();
@@ -226,6 +249,7 @@ const buildEditor = ({
 
     changeStrokeWidth: (value: number) => {
       setStrokeWidth(value);
+    
       const activeObjects = canvas.getActiveObjects();
       if (activeObjects.length) {
         activeObjects.forEach((object) => {
@@ -233,21 +257,31 @@ const buildEditor = ({
         });
         canvas.renderAll();
       }
+    
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.width = value;
+      }
     },
 
     changeStrokeColor: (value: string) => {
       setStrokeColor(value);
+
       const activeObjects = canvas.getActiveObjects();
       if (activeObjects.length) {
         activeObjects.forEach((object) => {
           if (isTextType(object.type)) {
-            object.set({ fill: value }); // text type dont have stroke
+            object.set({ fill: value });
             return;
           }
           object.set({ stroke: value });
         });
-        canvas.renderAll();
       }
+
+      if (canvas.freeDrawingBrush) {
+        canvas.freeDrawingBrush.color = value;
+      }
+
+      canvas.renderAll();
     },
 
     changeStrokeDashArray: (value: number[]) => {
@@ -510,11 +544,14 @@ export default function useEditor({
     setSelectedObjects,
     clearSelectionCallback
   });
+  const { copy, paste } = useClipboard(canvas);
 
 
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         setFillColor,
@@ -531,6 +568,8 @@ export default function useEditor({
     }
     return undefined;
   }, [
+    copy,
+    paste,
     canvas,
     fillColor,
     strokeColor,
