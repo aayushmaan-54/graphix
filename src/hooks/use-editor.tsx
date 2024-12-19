@@ -8,6 +8,7 @@ import {
   FabricObjectProps,
   ObjectEvents,
   PencilBrush,
+  Point,
   Polygon,
   Rect,
   SerializedObjectProps,
@@ -37,6 +38,7 @@ const customControls = createCircleControls();
 
 
 const buildEditor = ({
+  autoZoom,
   copy,
   paste,
   canvas,
@@ -72,6 +74,46 @@ const buildEditor = ({
   }
 
   return {
+    autoZoom,
+    getWorkspace: () => {
+      return canvas
+        .getObjects()
+        // @ts-ignore
+        .find((object) => object.name === 'clip');
+    },
+    zoomIn: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio += 0.05;
+    
+      const center = canvas.getCenterPoint();
+      canvas.zoomToPoint(
+        new Point(center.x, center.y),
+        zoomRatio
+      );
+    },
+    zoomOut: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio -= 0.05;
+    
+      const center = canvas.getCenterPoint();
+      canvas.zoomToPoint(
+        new Point(center.x, center.y),
+        zoomRatio < 0.2 ? 0.2 : zoomRatio
+      );
+    },
+    changeSize: (size: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+
+      workspace?.set(size);
+      autoZoom();
+    },
+
+    changeBackground: (value: string) => {
+      const workspace = getWorkspace();
+
+      workspace?.set({ fill: value });
+      canvas.renderAll();
+    },
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.renderAll();
@@ -249,7 +291,7 @@ const buildEditor = ({
 
     changeStrokeWidth: (value: number) => {
       setStrokeWidth(value);
-    
+
       const activeObjects = canvas.getActiveObjects();
       if (activeObjects.length) {
         activeObjects.forEach((object) => {
@@ -257,7 +299,7 @@ const buildEditor = ({
         });
         canvas.renderAll();
       }
-    
+
       if (canvas.freeDrawingBrush) {
         canvas.freeDrawingBrush.width = value;
       }
@@ -538,7 +580,7 @@ export default function useEditor({
   const [strokeDashArray, setStrokeDashArray] = useState<number[]>(STROKE_DASH_ARRAY);
   const [fontFamily, setFontFamily] = useState(DEFAULT_FONT_FAMILY);
 
-  useAutoResize({ canvas, container });
+  const { autoZoom } = useAutoResize({ canvas, container });
   useCanvasEvents({
     canvas,
     setSelectedObjects,
@@ -550,6 +592,7 @@ export default function useEditor({
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        autoZoom,
         copy,
         paste,
         canvas,
@@ -568,6 +611,7 @@ export default function useEditor({
     }
     return undefined;
   }, [
+    autoZoom,
     copy,
     paste,
     canvas,
@@ -586,7 +630,6 @@ export default function useEditor({
     initialCanvas: Canvas;
     initialContainer: HTMLDivElement
   }) => {
-
     const initialWorkspace = new Rect({
       left: 100,
       top: 100,

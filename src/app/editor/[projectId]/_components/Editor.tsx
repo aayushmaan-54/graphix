@@ -19,6 +19,7 @@ import FilterSidebar from "./FilterSidebar";
 import AI_Sidebar from "./AI_Sidebar";
 import RemoveBgSidebar from "./RemoveBgSidebar";
 import DrawSidebar from "./DrawSidebar";
+import SettingsSidebar from "./SettingsSidebar";
 
 
 export default function EditorSection() {
@@ -149,6 +150,11 @@ export default function EditorSection() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <SettingsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="flex-1 overflow-auto relative flex flex-col dark:bg-card bg-muted">
           <EditToolbar
             editor={editor}
@@ -159,7 +165,7 @@ export default function EditorSection() {
           <div ref={canvasContainerRef} className="flex-1 h-[calc(100%-px)]">
             <canvas ref={canvasRef} className="w-full h-full" />
           </div>
-          <Footer />
+          <Footer editor={editor} />
         </main>
       </div>
     </div>

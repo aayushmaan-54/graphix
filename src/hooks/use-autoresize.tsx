@@ -76,4 +76,6 @@ export default function useAutoResize({ canvas, container }: PropsType) {
       resizeObserver?.disconnect();
     };
   }, [canvas, container, autoZoom]); 
+
+  return { autoZoom };
 }

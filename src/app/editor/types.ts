@@ -1,4 +1,4 @@
-import { Canvas, FabricObject } from "fabric";
+import { Canvas, FabricObject, FabricObjectProps, ObjectEvents, SerializedObjectProps  } from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
@@ -90,6 +90,7 @@ export const selectionDependentTools = [
 
 
 export type BuildEditorProps = {
+  autoZoom: () => void;
   copy: () => void;
   paste: () => void;
   canvas: Canvas;
@@ -170,6 +171,12 @@ export const TEXT_OPTIONS = {
 
 
 export interface Editor {
+  autoZoom: () => void;
+  getWorkspace: () => FabricObject<Partial<FabricObjectProps>, SerializedObjectProps, ObjectEvents> | undefined;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  changeSize: (size: { width: number; height: number }) => void;
+  changeBackground: (value: string) => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
   onCopy: () => void;
